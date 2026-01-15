@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { API_CONFIG } from '@/constants';
-import { MediaResponse, MediaStats, ScrapeRequest, ScrapeResponse } from '@/types';
+import { API_CONFIG } from './constants';
+import { MediaResponse, MediaStats, ScrapeResponse } from '@/types/api';
 
 const apiClient = axios.create({
   baseURL: API_CONFIG.BASE_URL,
@@ -9,12 +9,9 @@ const apiClient = axios.create({
   },
 });
 
-export const mediaApi = {
+export const api = {
   scrapeUrls: async (urls: string[]): Promise<ScrapeResponse> => {
-    const response = await apiClient.post<ScrapeResponse>(
-      API_CONFIG.ENDPOINTS.SCRAPE,
-      { urls }
-    );
+    const response = await apiClient.post<ScrapeResponse>(API_CONFIG.ENDPOINTS.SCRAPE, { urls });
     return response.data;
   },
 
@@ -24,10 +21,7 @@ export const mediaApi = {
     type?: string;
     search?: string;
   }): Promise<MediaResponse> => {
-    const response = await apiClient.get<MediaResponse>(
-      API_CONFIG.ENDPOINTS.MEDIA,
-      { params }
-    );
+    const response = await apiClient.get<MediaResponse>(API_CONFIG.ENDPOINTS.MEDIA, { params });
     return response.data;
   },
 

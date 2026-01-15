@@ -16,28 +16,7 @@ export interface MediaStats {
   videos: number;
 }
 
-export interface PaginationMeta {
-  total: number;
-  page: number;
-  limit: number;
-  totalPages: number;
-}
-
-export interface MediaResponse {
-  data: Media[];
-  meta: PaginationMeta;
-}
-
 export interface MediaFilters {
   type: string;
   search: string;
-}
-
-export interface ScrapeRequest {
-  urls: string[];
-}
-
-export interface ScrapeResponse {
-  message: string;
-  jobCount: number;
 }

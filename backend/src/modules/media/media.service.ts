@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { GetMediaDto } from './media.dto';
 import { QUEUE_NAMES, QUEUE_CONFIG, PAGINATION } from '../../constants';
 import { PaginatedResponse } from '../../interfaces';

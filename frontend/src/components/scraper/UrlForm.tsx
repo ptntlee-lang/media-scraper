@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Button from '@/components/ui/Button';
 
 interface UrlFormProps {
   onSubmit: (urls: string[]) => void;
@@ -16,7 +17,7 @@ export default function UrlForm({ onSubmit, loading = false }: UrlFormProps) {
       .split('\n')
       .map(url => url.trim())
       .filter(url => url.length > 0);
-    
+
     if (urls.length === 0) {
       alert('Please enter at least one URL');
       return;
@@ -35,19 +36,15 @@ export default function UrlForm({ onSubmit, loading = false }: UrlFormProps) {
         <textarea
           id="urls"
           value={urlText}
-          onChange={(e) => setUrlText(e.target.value)}
+          onChange={e => setUrlText(e.target.value)}
           rows={6}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="https://example.com&#10;https://example2.com&#10;https://example3.com"
         />
       </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-md transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-      >
+      <Button type="submit" disabled={loading} fullWidth>
         {loading ? 'Submitting...' : 'Start Scraping'}
-      </button>
+      </Button>
     </form>
   );
 }

@@ -1,12 +1,12 @@
 'use client';
 
-import { MediaStats } from '@/types';
+import { MediaStats } from '@/types/media';
 
-interface StatsProps {
+interface MediaStatsProps {
   stats: MediaStats;
 }
 
-export default function Stats({ stats }: StatsProps) {
+export default function MediaStatsComponent({ stats }: MediaStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
       <div className="bg-white rounded-lg shadow-md p-6">

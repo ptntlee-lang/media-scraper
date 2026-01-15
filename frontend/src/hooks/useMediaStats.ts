@@ -1,35 +1,22 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { mediaApi } from '@/api';
-import { MediaStats } from '@/types';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api';
 
 export const useMediaStats = () => {
-  const [stats, setStats] = useState<MediaStats>({
-    total: 0,
-    images: 0,
-    videos: 0,
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['stats'],
+    queryFn: () => api.getStats(),
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await mediaApi.getStats();
-      setStats(data);
-    } catch (err) {
-      setError('Failed to fetch stats');
-      console.error('Error fetching stats:', err);
-    } finally {
-      setLoading(false);
-    }
+  return {
+    stats: data || {
+      total: 0,
+      images: 0,
+      videos: 0,
+    },
+    loading: isLoading,
+    error: error ? 'Failed to fetch stats' : null,
+    refetch,
   };
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  return { stats, loading, error, refetch: fetchStats };
 };

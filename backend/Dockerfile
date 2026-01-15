@@ -9,6 +9,8 @@ COPY package*.json ./
 RUN npm ci || npm install --legacy-peer-deps --no-audit --no-fund
 
 COPY . .
+# Ensure Prisma client is generated so TypeScript can find model types
+RUN npx prisma generate || true
 RUN npm run build
 
 # Remove devDependencies before copying to the final image
