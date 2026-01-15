@@ -5,7 +5,8 @@
   "scripts": {
     "prepare": "husky install",
     "lint": "eslint \"frontend/src/**/*.{ts,tsx,js,jsx}\" \"backend/src/**/*.ts\" --ext .ts,.tsx,.js --max-warnings=0",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "typecheck": "cd backend && npm run build --noEmit && cd ../frontend && npx tsc --noEmit"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.19.0",
@@ -22,7 +23,12 @@
     "eslint-plugin-react": "^7.32.2"
   },
   "lint-staged": {
-    "**/*.{ts,tsx,js,jsx}": [
+    "backend/src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write",
+      "bash -c 'cd backend && npm run build'"
+    ],
+    "frontend/src/**/*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
