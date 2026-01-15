@@ -5,6 +5,7 @@ Welcome! This guide will help you get the Media Scraper up and running in minute
 ## 🎯 What This Application Does
 
 The Media Scraper is a full-stack application that:
+
 1. Accepts multiple website URLs
 2. Scrapes all images and videos from those pages
 3. Stores the media information in a database
@@ -15,6 +16,7 @@ The Media Scraper is a full-stack application that:
 ### Step 1: Prerequisites
 
 Make sure you have Docker installed:
+
 ```bash
 docker --version
 ```
@@ -40,6 +42,7 @@ Open your browser and go to: **http://localhost:3000**
 ### Step 4: Try It Out!
 
 1. In the text area, enter some URLs (one per line), for example:
+
    ```
    https://example.com
    https://unsplash.com
@@ -68,12 +71,14 @@ Open your browser and go to: **http://localhost:3000**
 ### Scraping URLs
 
 The application can scrape:
+
 - ✅ Images from `<img>` tags
 - ✅ Videos from `<video>` tags
 - ✅ Embedded videos (YouTube, Vimeo, etc.)
 - ✅ Background images (coming soon)
 
 Tips:
+
 - Works best with public websites
 - Some sites may block scraping
 - Processing time depends on page size
@@ -81,12 +86,14 @@ Tips:
 ### Searching and Filtering
 
 **Search by**:
+
 - Image/video titles
 - Alt text
 - Source URL
 - Media URL
 
 **Filter by**:
+
 - All media
 - Images only
 - Videos only
@@ -96,6 +103,7 @@ Tips:
 You can also use the API directly:
 
 **Submit URLs for scraping**:
+
 ```bash
 curl -X POST http://localhost:3001/scrape \
   -H "Content-Type: application/json" \
@@ -103,11 +111,13 @@ curl -X POST http://localhost:3001/scrape \
 ```
 
 **Get scraped media**:
+
 ```bash
 curl "http://localhost:3001/media?page=1&limit=20"
 ```
 
 **Get statistics**:
+
 ```bash
 curl http://localhost:3001/stats
 ```
@@ -123,6 +133,7 @@ npm run test:load
 ```
 
 This will show:
+
 - Requests per second
 - Average latency
 - Error rate
@@ -133,6 +144,7 @@ This will show:
 ### Changing Ports
 
 Edit `docker-compose.yml` to change default ports:
+
 - Frontend: 3000
 - Backend: 3001
 - PostgreSQL: 5432
@@ -141,6 +153,7 @@ Edit `docker-compose.yml` to change default ports:
 ### Adjusting Resources
 
 Edit `docker-compose.yml` under `deploy.resources`:
+
 ```yaml
 resources:
   limits:
@@ -151,12 +164,13 @@ resources:
 ### Environment Variables
 
 **Backend** (`backend/.env`):
-- `DATABASE_HOST`: Database hostname
-- `DATABASE_PORT`: Database port
+
+- `DATABASE_URL`: Database connection string (e.g., `postgresql://user:pass@host:port/db`)
 - `REDIS_HOST`: Redis hostname
 - `PORT`: API port
 
 **Frontend** (`frontend/.env.local`):
+
 - `NEXT_PUBLIC_API_URL`: Backend API URL
 
 ## 🐛 Troubleshooting
@@ -164,6 +178,7 @@ resources:
 ### Services Won't Start
 
 **Problem**: Port already in use
+
 ```bash
 # Check what's using the port
 lsof -i :3000
@@ -173,6 +188,7 @@ lsof -i :3001
 ```
 
 **Problem**: Docker not running
+
 ```bash
 # Start Docker Desktop, then try again
 ./start.sh
@@ -181,11 +197,13 @@ lsof -i :3001
 ### Can't See Scraped Media
 
 **Problem**: Media not appearing after scraping
+
 - Wait a few seconds (scraping takes time)
 - Refresh the page
 - Check backend logs: `docker-compose logs backend`
 
 **Problem**: Some images not loading
+
 - Some URLs may be invalid
 - Image hosts may block external access
 - Check browser console for errors
@@ -193,11 +211,13 @@ lsof -i :3001
 ### Performance Issues
 
 **Problem**: Slow scraping
+
 - Increase worker concurrency in `scraping.processor.ts`
 - Add more memory to containers
 - Check Redis and PostgreSQL performance
 
 **Problem**: Out of memory
+
 - Reduce worker concurrency
 - Increase Docker memory limit
 - Check for memory leaks in logs
@@ -205,6 +225,7 @@ lsof -i :3001
 ### Database Issues
 
 **Problem**: Database connection failed
+
 ```bash
 # Restart database
 docker-compose restart postgres
