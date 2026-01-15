@@ -1,13 +1,13 @@
 'use client';
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { api } from '@/lib/api';
+import * as api from '@/api/index.api';
 
 export const useScraper = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (urls: string[]) => api.scrapeUrls(urls),
+    mutationFn: (urls: string[]) => api.scraperApi.scrapeUrls(urls),
     onSuccess: () => {
       // Invalidate and refetch media queries after successful scrape
       queryClient.invalidateQueries({ queryKey: ['media'] });

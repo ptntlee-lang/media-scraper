@@ -1,4 +1,4 @@
-import { Media } from './media';
+import { Media } from './media.type';
 
 export interface PaginationMeta {
   total: number;
@@ -12,5 +12,5 @@ export interface MediaResponse {
   meta: PaginationMeta;
 }
 
-export * from './media';
-export * from './scraper';
+export * from './media.type';
+export * from './scraper.type';

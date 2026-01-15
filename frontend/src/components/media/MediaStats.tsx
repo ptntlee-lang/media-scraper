@@ -1,6 +1,6 @@
 'use client';
 
-import { MediaStats } from '@/types/media';
+import { MediaStats } from '@/types/media.type';
 
 interface MediaStatsProps {
   stats: MediaStats;

@@ -2,7 +2,7 @@
 
 import SearchBar from '@/components/ui/SearchBar';
 import Select from '@/components/ui/Select';
-import { MediaFilters } from '@/types/media';
+import { MediaFilters } from '@/types/media.type';
 
 interface MediaFiltersProps {
   filters: MediaFilters;

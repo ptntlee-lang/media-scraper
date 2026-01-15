@@ -1,9 +1,9 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
-import { MediaFilters } from '@/types/media';
-import { PAGINATION } from '@/lib/constants';
+import * as api from '@/api/index.api';
+import { MediaFilters } from '@/types/media.type';
+import { PAGINATION } from '@/constants';
 
 export const useMedia = (filters: MediaFilters, page: number) => {
   const { data, isLoading, error } = useQuery({
@@ -13,7 +13,7 @@ export const useMedia = (filters: MediaFilters, page: number) => {
       if (filters.type) params.type = filters.type;
       if (filters.search) params.search = filters.search;
 
-      return await api.getMedia(params);
+      return await api.mediaApi.getMedia(params);
     },
   });
 

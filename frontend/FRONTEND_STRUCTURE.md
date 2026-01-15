@@ -121,8 +121,8 @@ const { scrapeUrls, loading, isSuccess } = useScraper();
 
 ```typescript
 import { isValidUrl, parseUrls, getHostname } from '@/lib/utils';
-import { API_CONFIG, PAGINATION } from '@/lib/constants';
-import { api } from '@/lib/api';
+import { API_CONFIG, PAGINATION } from '@/constants';
+import { api } from '@/api';
 ```
 
 ## Development
@@ -158,8 +158,8 @@ npm run lint
 
 ### Changes from Old Structure
 
-1. **Removed**: `src/api/` → Moved to `src/lib/api.ts`
-2. **Removed**: `src/constants/` → Moved to `src/lib/constants.ts`
+1. **Removed**: `src/api/` → Moved to `src/api.ts`
+2. **Removed**: `src/constants/` → Moved to `src/constants.ts`
 3. **Reorganized**: Components split into `ui/`, `media/`, `scraper/`
 4. **Renamed**: `useMediaScraper` → `useScraper`
 5. **Added**: New utility hooks (`usePagination`, `useDebounce`)
@@ -175,8 +175,8 @@ import { API_CONFIG } from '@/constants';
 import MediaGallery from '@/components/MediaGallery';
 
 // New
-import { api } from '@/lib/api';
-import { API_CONFIG } from '@/lib/constants';
+import { api } from '@/api';
+import { API_CONFIG } from '@/constants';
 import { MediaGrid } from '@/components/media';
 ```
 

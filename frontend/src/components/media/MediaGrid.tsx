@@ -1,6 +1,6 @@
 'use client';
 
-import { Media } from '@/types/media';
+import { Media } from '@/types/media.type';
 import MediaCard from './MediaCard';
 
 interface MediaGridProps {

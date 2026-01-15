@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { Media } from '@/types/media';
+import { Media } from '@/types/media.type';
 
 interface MediaCardProps {
   item: Media;

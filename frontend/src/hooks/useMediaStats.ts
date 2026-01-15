@@ -1,12 +1,12 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { api } from '@/lib/api';
+import * as api from '@/api/index.api';
 
 export const useMediaStats = () => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['stats'],
-    queryFn: () => api.getStats(),
+    queryFn: () => api.mediaApi.getStats(),
   });
 
   return {
