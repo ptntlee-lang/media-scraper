@@ -13,9 +13,6 @@ COPY . .
 RUN npx prisma generate || true
 RUN npm run build
 
-# Remove devDependencies before copying to the final image
-RUN npm prune --production
-
 FROM node:20-alpine
 
 WORKDIR /app
@@ -23,12 +20,24 @@ WORKDIR /app
 # Install dumb-init for proper signal handling
 RUN apk add --no-cache dumb-init
 
-# Copy only necessary files
-COPY --from=builder /app/node_modules ./node_modules
+# Copy build output and package metadata
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package*.json ./
 
-ENV NODE_ENV=production
+# Install only production dependencies in the final image to avoid
+# running `npm prune` (which may trigger peer-dependency resolution errors
+# inside the builder). Using `npm ci --omit=dev` ensures a clean production
+# install based on the lockfile.
+RUN npm ci --omit=dev --legacy-peer-deps --no-audit --no-fund || npm install --production --legacy-peer-deps --no-audit --no-fund
+
+# Copy the generated Prisma client from the builder stage into the final
+# image. The Prisma client is generated during the build step and is not
+# available after a production-only `npm ci` (since `prisma` is often a
+# devDependency), so copy the generated artifacts from the builder.
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+
+ENV NODE_ENV=development
 
 EXPOSE 3001
 

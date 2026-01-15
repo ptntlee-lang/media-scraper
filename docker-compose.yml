@@ -42,7 +42,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       PORT: 3001
-      NODE_ENV: production
+      NODE_ENV: development
     depends_on:
       postgres:
         condition: service_healthy

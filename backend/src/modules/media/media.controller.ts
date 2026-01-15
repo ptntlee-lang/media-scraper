@@ -2,7 +2,9 @@ import { Controller, Post, Get, Body, Query, Inject, LoggerService } from '@nest
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { MediaService } from './media.service';
 import { ScrapeUrlsDto, GetMediaDto } from './media.dto';
+import { ApiTags, ApiOperation, ApiBody, ApiQuery } from '@nestjs/swagger';
 
+@ApiTags('media')
 @Controller()
 export class MediaController {
   constructor(
@@ -11,6 +13,8 @@ export class MediaController {
   ) {}
 
   @Post('scrape')
+  @ApiOperation({ summary: 'Queue URLs for scraping' })
+  @ApiBody({ type: ScrapeUrlsDto })
   async scrapeUrls(@Body() scrapeUrlsDto: ScrapeUrlsDto) {
     this.logger.log(
       `Received scraping request for ${scrapeUrlsDto.urls.length} URLs`,
@@ -22,6 +26,11 @@ export class MediaController {
   }
 
   @Get('media')
+  @ApiOperation({ summary: 'Get scraped media with optional filters' })
+  @ApiQuery({ name: 'page', required: false })
+  @ApiQuery({ name: 'limit', required: false })
+  @ApiQuery({ name: 'type', required: false })
+  @ApiQuery({ name: 'search', required: false })
   async getMedia(@Query() query: GetMediaDto) {
     this.logger.debug(
       `Fetching media with filters: ${JSON.stringify(query)}`,
@@ -31,6 +40,7 @@ export class MediaController {
   }
 
   @Get('stats')
+  @ApiOperation({ summary: 'Get media scraping statistics' })
   async getStats() {
     this.logger.debug('Fetching media stats', MediaController.name);
     return this.mediaService.getStats();

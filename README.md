@@ -28,10 +28,19 @@ docker-compose up -d
 # Frontend will be available at: http://localhost:3000
 ```
 
+## Backend Swagger Docs
+
+- Swagger UI: `http://localhost:3001/api-docs`
+- OpenAPI JSON: `http://localhost:3001/api-json`
+
+Start the backend and open the Swagger UI to explore the API.
+
 ## API Endpoints
 
 ### POST /scrape
+
 Submit URLs for scraping
+
 ```json
 {
   "urls": ["https://example.com", "https://example2.com"]
@@ -39,7 +48,9 @@ Submit URLs for scraping
 ```
 
 ### GET /media
+
 Get scraped media with pagination and filtering
+
 ```
 Query params:
 - page: number (default: 1)

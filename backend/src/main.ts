@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { AppModule } from './app.module';
+import setupSwagger from './modules/swagger.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,13 @@ async function bootstrap() {
       transform: true,
     })
   );
+
+  // Setup Swagger (delegated to ./swagger.module)
+  if (process.env.NODE_ENV !== 'production') {
+    setupSwagger(app, logger);
+  } else {
+    logger.log('Swagger UI disabled in production mode', 'Bootstrap');
+  }
 
   const port = process.env.PORT || 3001;
   await app.listen(port);
