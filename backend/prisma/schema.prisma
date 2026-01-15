@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  sourceUrl String   @map("source_url")
+  mediaUrl  String   @map("media_url")
+  type      MediaType
+  alt       String?
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([type])
+  @@index([sourceUrl])
+  @@map("media")
+}
+
+enum MediaType {
+  image
+  video
+}

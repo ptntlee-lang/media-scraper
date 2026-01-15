@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { Media } from './media.entity';
+import { PrismaService } from '../prisma.service';
 import { GetMediaDto } from './media.dto';
 import { QUEUE_NAMES, QUEUE_CONFIG, PAGINATION } from '../../constants';
 import { PaginatedResponse } from '../../interfaces';
+import { Media, Prisma } from '@prisma/client';
 
 @Injectable()
 export class MediaService {
   constructor(
-    @InjectRepository(Media)
-    private mediaRepository: Repository<Media>,
+    private prisma: PrismaService,
     @InjectQueue(QUEUE_NAMES.SCRAPING)
-    private scrapingQueue: Queue,
+    private scrapingQueue: Queue
   ) {}
 
   async queueScraping(urls: string[]): Promise<{ message: string; jobCount: number }> {
@@ -37,28 +35,38 @@ export class MediaService {
   }
 
   async getMedia(query: GetMediaDto): Promise<PaginatedResponse<Media>> {
-    const { page = PAGINATION.DEFAULT_PAGE, limit = PAGINATION.DEFAULT_LIMIT, type, search } = query;
+    const {
+      page = PAGINATION.DEFAULT_PAGE,
+      limit = PAGINATION.DEFAULT_LIMIT,
+      type,
+      search,
+    } = query;
     const skip = (page - 1) * limit;
 
-    const queryBuilder = this.mediaRepository.createQueryBuilder('media');
+    const where: Prisma.MediaWhereInput = {};
 
     if (type) {
-      queryBuilder.andWhere('media.type = :type', { type });
+      where.type = type as 'image' | 'video';
     }
 
     if (search) {
-      queryBuilder.andWhere(
-        '(media.alt ILIKE :search OR media.title ILIKE :search OR media.sourceUrl ILIKE :search OR media.mediaUrl ILIKE :search)',
-        { search: `%${search}%` },
-      );
+      where.OR = [
+        { alt: { contains: search, mode: 'insensitive' } },
+        { title: { contains: search, mode: 'insensitive' } },
+        { sourceUrl: { contains: search, mode: 'insensitive' } },
+        { mediaUrl: { contains: search, mode: 'insensitive' } },
+      ];
     }
 
-    queryBuilder
-      .orderBy('media.createdAt', 'DESC')
-      .skip(skip)
-      .take(limit);
-
-    const [data, total] = await queryBuilder.getManyAndCount();
+    const [data, total] = await Promise.all([
+      this.prisma.media.findMany({
+        where,
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.media.count({ where }),
+    ]);
 
     return {
       data,
@@ -73,9 +81,9 @@ export class MediaService {
 
   async getStats() {
     const [total, images, videos] = await Promise.all([
-      this.mediaRepository.count(),
-      this.mediaRepository.count({ where: { type: 'image' } }),
-      this.mediaRepository.count({ where: { type: 'video' } }),
+      this.prisma.media.count(),
+      this.prisma.media.count({ where: { type: 'image' } }),
+      this.prisma.media.count({ where: { type: 'video' } }),
     ]);
 
     return {
