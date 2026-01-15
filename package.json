@@ -8,13 +8,18 @@
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\""
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.37.5",
     "husky": "^8.0.3",
     "lint-staged": "^13.2.0",
-    "eslint": "^8.56.0",
     "prettier": "^3.2.4",
-    "eslint-config-prettier": "^9.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0"
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "eslint-plugin-react": "^7.32.2"
   },
   "lint-staged": {
     "**/*.{ts,tsx,js,jsx}": [
