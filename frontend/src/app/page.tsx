@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import MediaStatsComponent from '@/components/media/MediaStats';
-import { useMediaStats } from '@/hooks';
+import { useMediaStats } from '@/hooks/index.hook';
 
 export default function Home() {
   const { stats } = useMediaStats();

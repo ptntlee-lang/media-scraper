@@ -11,6 +11,8 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    // Map Next.js Image to our manual mock so the real component and props never get loaded in tests
+    '^next/image$': '<rootDir>/__mocks__/next/image.js',
   },
   collectCoverageFrom: [
     'src/**/*.{js,jsx,ts,tsx}',

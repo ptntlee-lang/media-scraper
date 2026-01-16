@@ -8,7 +8,7 @@ import MediaStatsComponent from '@/components/media/MediaStats';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Pagination from '@/components/ui/Pagination';
 import EmptyState from '@/components/ui/EmptyState';
-import { useMedia, useMediaStats } from '@/hooks';
+import { useMedia, useMediaStats } from '@/hooks/index.hook';
 import { MediaFilters } from '@/types/media.type';
 
 export default function MediaPage() {

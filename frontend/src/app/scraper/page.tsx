@@ -3,15 +3,15 @@
 import Link from 'next/link';
 import UrlForm from '@/components/scraper/UrlForm';
 import MediaStatsComponent from '@/components/media/MediaStats';
-import { useMediaStats, useScraper } from '@/hooks';
+import { useMediaStats, useScraper } from '@/hooks/index.hook';
 
 export default function ScraperPage() {
   const { stats, refetch: refetchStats } = useMediaStats();
-  const { scrapeUrls, loading } = useScraper();
+  const { scrapeUrlsAsync, loading } = useScraper();
 
   const handleScrape = async (urls: string[]) => {
     try {
-      await scrapeUrls(urls);
+      await scrapeUrlsAsync(urls);
       alert(`Successfully queued ${urls.length} URLs for scraping!`);
       setTimeout(() => {
         refetchStats();

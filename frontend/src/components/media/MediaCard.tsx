@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { Media } from '@/types/media.type';
 
 interface MediaCardProps {
@@ -12,12 +11,11 @@ export default function MediaCard({ item }: MediaCardProps) {
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow">
       <div className="relative h-48 bg-gray-100">
         {item.type === 'image' ? (
-          <Image
+          // Use a plain <img> so no Next.js-specific props are forwarded to the DOM
+          <img
             src={item.mediaUrl}
             alt={item.alt || 'Scraped image'}
-            fill
-            className="object-cover"
-            unoptimized
+            className="absolute inset-0 w-full h-full object-cover"
             onError={e => {
               const target = e.target as HTMLImageElement;
               target.src = '/placeholder.png';

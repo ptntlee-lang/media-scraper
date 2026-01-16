@@ -21,9 +21,14 @@ export const useScraper = () => {
   return {
     scrapeUrls: mutation.mutate,
     scrapeUrlsAsync: mutation.mutateAsync,
+    // Provide several aliases so tests and callers can use expected fields
     loading: mutation.isPending,
+    isLoading: mutation.isPending,
+    isPending: mutation.isPending,
     error: mutation.isError ? 'Failed to submit URLs for scraping' : null,
+    isError: mutation.isError,
     isSuccess: mutation.isSuccess,
+    data: mutation.data,
     reset: mutation.reset,
   };
 };
