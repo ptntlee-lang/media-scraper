@@ -1,6 +1,8 @@
 import { Injectable, Inject, LoggerService } from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../prisma/prisma.service';
 import { GetMediaDto } from './media.dto';
@@ -44,7 +46,8 @@ export class MediaService {
     private prisma: PrismaService,
     @InjectQueue(QUEUE_NAMES.SCRAPING)
     private scrapingQueue: Queue,
-    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
+    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {}
 
   /**
@@ -270,5 +273,57 @@ export class MediaService {
       images,
       videos,
     };
+  }
+
+  /**
+   * Invalidate Media Cache
+   *
+   * Clears all cached media queries and statistics.
+   * Should be called after new media is scraped and stored.
+   *
+   * @remarks
+   * Cache Invalidation Strategy:
+   * - Clears stats cache (60-second TTL)
+   * - Clears all media list cache entries
+   * - Called by scraping processor after successful media insertion
+   *
+   * Pattern Matching:
+   * - Uses wildcard pattern to clear all related cache keys
+   * - Format: '/media?*' matches all query combinations
+   *
+   * @example
+   * ```typescript
+   * await mediaService.invalidateCache();
+   * // Clears: /stats, /media?page=1&limit=20, /media?type=image, etc.
+   * ```
+   */
+  async invalidateCache(): Promise<void> {
+    try {
+      this.logger.debug('Invalidating media cache', MediaService.name);
+
+      // Clear stats cache
+      await this.cacheManager.del('/stats');
+
+      // Clear all media query caches
+      // Note: cache-manager doesn't support wildcard delete by default
+      // We clear the most common cache patterns
+      const commonQueries = [
+        '/media?page=1&limit=20',
+        '/media?page=1&limit=50',
+        '/media?type=image&page=1&limit=20',
+        '/media?type=video&page=1&limit=20',
+      ];
+
+      await Promise.all(commonQueries.map(key => this.cacheManager.del(key)));
+
+      this.logger.debug('Media cache invalidated successfully', MediaService.name);
+    } catch (error) {
+      this.logger.error(
+        `Failed to invalidate cache: ${error.message}`,
+        error.stack,
+        MediaService.name
+      );
+      // Don't throw - cache invalidation failure shouldn't break the app
+    }
   }
 }

@@ -1,4 +1,14 @@
-import { Controller, Post, Get, Body, Query, Inject, LoggerService } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Query,
+  Inject,
+  LoggerService,
+  UseInterceptors,
+} from '@nestjs/common';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { MediaService } from './media.service';
 import { ScrapeUrlsDto, GetMediaDto } from './media.dto';
@@ -128,6 +138,8 @@ export class MediaController {
    * @see MediaService.getMedia
    */
   @Get('media')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(30) // Cache for 30 seconds
   @ApiOperation({ summary: 'Get scraped media with optional filters' })
   @ApiQuery({ name: 'page', required: false })
   @ApiQuery({ name: 'limit', required: false })
@@ -171,6 +183,8 @@ export class MediaController {
    * @see MediaService.getStats
    */
   @Get('stats')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(60) // Cache for 60 seconds
   @ApiOperation({ summary: 'Get media scraping statistics' })
   async getStats() {
     this.logger.debug('Fetching media stats', MediaController.name);

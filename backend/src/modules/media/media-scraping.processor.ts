@@ -1,9 +1,10 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import { Injectable, Inject, LoggerService } from '@nestjs/common';
+import { Injectable, Inject, LoggerService, forwardRef } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { PrismaService } from '../prisma/prisma.service';
 import { ScraperService } from './media-scraper.service';
+import { MediaService } from './media.service';
 import { QUEUE_NAMES, QUEUE_CONFIG } from '../../constants';
 
 /**
@@ -55,6 +56,7 @@ export class ScrapingProcessor extends WorkerHost {
   constructor(
     private prisma: PrismaService,
     private scraperService: ScraperService,
+    @Inject(forwardRef(() => MediaService)) private mediaService: MediaService,
     @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService
   ) {
     super();
@@ -124,6 +126,9 @@ export class ScrapingProcessor extends WorkerHost {
           `Successfully scraped and saved ${mediaToCreate.length} media items from ${url}`,
           ScrapingProcessor.name
         );
+
+        // Invalidate cache after new media is added
+        await this.mediaService.invalidateCache();
       } else {
         this.logger.warn(`No media items found while scraping ${url}`, ScrapingProcessor.name);
       }
