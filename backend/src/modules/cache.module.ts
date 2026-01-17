@@ -50,6 +50,7 @@ import { redisStore } from 'cache-manager-ioredis-yet';
     NestCacheModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
+      isGlobal: true, // Make cache available globally
       useFactory: async (configService: ConfigService) => {
         const redisHost = configService.get<string>('REDIS_HOST', 'localhost');
         const redisPort = configService.get<number>('REDIS_PORT', 6379);
@@ -60,7 +61,6 @@ import { redisStore } from 'cache-manager-ioredis-yet';
             port: redisPort,
             ttl: 30, // Default TTL: 30 seconds
           }),
-          isGlobal: true, // Make cache available globally
         };
       },
     }),
