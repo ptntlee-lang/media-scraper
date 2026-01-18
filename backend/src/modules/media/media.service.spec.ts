@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { MediaService } from './media.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { Queue } from 'bullmq';
@@ -43,6 +44,12 @@ describe('MediaService - Unit Tests', () => {
         {
           provide: WINSTON_MODULE_NEST_PROVIDER,
           useValue: mockLogger,
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: {
+            del: jest.fn(),
+          },
         },
       ],
     }).compile();
