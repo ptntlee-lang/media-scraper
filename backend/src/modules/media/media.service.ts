@@ -99,6 +99,7 @@ export class MediaService {
         removeOnComplete: QUEUE_CONFIG.SCRAPING.REMOVE_ON_COMPLETE,
         removeOnFail: QUEUE_CONFIG.SCRAPING.REMOVE_ON_FAIL,
         attempts: QUEUE_CONFIG.SCRAPING.ATTEMPTS,
+        backoff: QUEUE_CONFIG.SCRAPING.backoff,
       },
     }));
 

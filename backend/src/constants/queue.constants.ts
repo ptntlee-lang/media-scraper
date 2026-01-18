@@ -85,5 +85,10 @@ export const QUEUE_CONFIG = {
     REMOVE_ON_COMPLETE: true,
     /** Keep last 100 failed jobs for debugging */
     REMOVE_ON_FAIL: 100,
+    backoff: {
+      type: 'exponential',
+      delay: 1000,
+      maxDelay: 30000,
+    },
   },
 } as const;

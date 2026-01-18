@@ -38,15 +38,8 @@ const REAL_TEST_URLS = {
   // Safe public domain websites
   PUBLIC_DOMAIN: [
     'https://commons.wikimedia.org/wiki/Main_Page', // Wikimedia Commons
-    'https://www.nasa.gov',                       // NASA (public domain)
-    'https://www.pexels.com/public-domain-images', // Pexels free images
+    'https://www.nasa.gov'                       // NASA (public domain)
   ],
-  
-  // Video test URLs (if you want to test video scraping)
-  VIDEO_SITES: [
-    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-  ]
 };
 
 // Flatten all URLs for easy access
