@@ -62,7 +62,7 @@ describe('Scraper Page - E2E Tests', () => {
     const textarea = screen.getByLabelText(/Enter URLs/i);
     const submitButton = screen.getByRole('button', { name: /Start Scraping/i });
 
-    await user.type(textarea, 'https://example1.com{Enter}https://example2.com');
+    await user.type(textarea, 'https://example1.com,https://example2.com');
     await user.click(submitButton);
 
     await waitFor(() =>

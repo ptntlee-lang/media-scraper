@@ -46,10 +46,7 @@ describe('UrlForm Component - Unit Tests', () => {
 
     const textarea = screen.getByLabelText(/Enter URLs/i) as HTMLTextAreaElement;
 
-    await user.type(
-      textarea,
-      'https://example1.com{Enter}https://example2.com{Enter}https://example3.com'
-    );
+    await user.type(textarea, 'https://example1.com,https://example2.com,https://example3.com');
     await user.click(screen.getByRole('button', { name: /Start Scraping/i }));
 
     expect(mockOnSubmit).toHaveBeenCalledWith([
@@ -91,10 +88,7 @@ describe('UrlForm Component - Unit Tests', () => {
 
     const textarea = screen.getByLabelText(/Enter URLs/i);
 
-    await user.type(
-      textarea,
-      'https://example1.com{Enter}{Enter}{Enter}https://example2.com{Enter}'
-    );
+    await user.type(textarea, 'https://example1.com,https://example2.com');
     await user.click(screen.getByRole('button', { name: /Start Scraping/i }));
 
     expect(mockOnSubmit).toHaveBeenCalledWith(['https://example1.com', 'https://example2.com']);
@@ -121,7 +115,7 @@ describe('UrlForm Component - Unit Tests', () => {
 
     const textarea = screen.getByLabelText(/Enter URLs/i);
 
-    await user.type(textarea, '  https://example1.com  {Enter}  https://example2.com  ');
+    await user.type(textarea, '  https://example1.com  ,  https://example2.com  ');
     await user.click(screen.getByRole('button', { name: /Start Scraping/i }));
 
     expect(mockOnSubmit).toHaveBeenCalledWith(['https://example1.com', 'https://example2.com']);
