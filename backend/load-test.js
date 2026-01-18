@@ -198,12 +198,16 @@ function printResults(title, result) {
 async function checkServerHealth() {
   try {
     log('blue', '🏥 Checking server health...');
-    const response = await axios.get('http://localhost:3001/stats', { timeout: 5000 });
+    const response = await axios.get('http://localhost:3001/stats', { 
+      timeout: 5000,
+      validateStatus: (status) => status === 200 
+    });
     log('green', `✓ Server is healthy: ${JSON.stringify(response.data)}`);
     return true;
   } catch (error) {
-    log('red', `✗ Server health check failed: ${error.message}`);
+    log('red', `✗ Server health check failed: ${error.message || error}`);
     log('yellow', '⚠️  Make sure the backend server is running: npm run start:dev');
+    console.error('Full error:', error);
     return false;
   }
 }
