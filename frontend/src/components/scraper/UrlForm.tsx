@@ -14,7 +14,7 @@ export default function UrlForm({ onSubmit, loading = false }: UrlFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const urls = urlText
-      .split('\n')
+      .split(',')
       .map(url => url.trim())
       .filter(url => url.length > 0);
 
@@ -31,7 +31,7 @@ export default function UrlForm({ onSubmit, loading = false }: UrlFormProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
         <label htmlFor="urls" className="block text-sm font-medium text-gray-700 mb-2">
-          Enter URLs (one per line)
+          Enter URLs (comma-separated)
         </label>
         <textarea
           id="urls"
@@ -39,7 +39,7 @@ export default function UrlForm({ onSubmit, loading = false }: UrlFormProps) {
           onChange={e => setUrlText(e.target.value)}
           rows={6}
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="https://example.com&#10;https://example2.com&#10;https://example3.com"
+          placeholder="https://example.com, https://example2.com, https://example3.com"
         />
       </div>
       <Button type="submit" disabled={loading} fullWidth>
